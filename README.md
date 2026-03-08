@@ -35,6 +35,28 @@ Open **http://localhost:5173** in your browser.
 
 ---
 
+## Docker (full stack)
+
+From the project root, with a `.env` file in place (copy from `.env.example` if needed):
+
+```bash
+docker compose up --build
+```
+
+- **Frontend:** http://localhost (port 80) — nginx serves the app and proxies `/api` to the backend.
+- **Backend:** http://localhost:8000 (direct).
+- **PostgreSQL** runs in a container; data is stored in a Docker volume.
+
+**First-time seed (admin user, services, FAQs):** after the stack is up, run once:
+
+```bash
+docker compose exec backend python seed.py
+```
+
+Then use staff gate and login as in **Staff access** below (e.g. `admin@arckae.com` / `admin123`).
+
+---
+
 ## Staff access (all 3 account levels)
 
 After setup, the seed creates one **admin** user. Staff must pass the **staff gate** before the login page.
@@ -74,7 +96,7 @@ After setup, the seed creates one **admin** user. Staff must pass the **staff ga
 ## Environment & Database Configuration
 
 The backend reads configuration from a `.env` file at the **project root**.
-An example file is provided as `.env.example`.
+An example file is provided as `.env.example`. **Never commit `.env`** — it contains secrets and is listed in `.gitignore`. If `.env` was ever pushed to the repo, rotate SMTP password, `JWT_SECRET_KEY`, and `STAFF_ACCESS_KEY` immediately.
 
 ### Default PostgreSQL URL
 
@@ -251,3 +273,23 @@ Key routes:
 
 # ARCKAE-Website
 Client: ARCKAE EDUCATION AGENCY LTD
+
+Docker setup
+
+File	Purpose
+backend/Dockerfile	Python 3.12-slim image; installs deps and runs uvicorn on port 8000.
+backend/.dockerignore	Excludes .venv, __pycache__, .env, etc.
+frontend/Dockerfile	Multi-stage: Node 20 build → npm run build; then nginx:alpine serves dist/ and proxies /api to the backend.
+frontend/nginx.conf	SPA fallback + location /api/ → http://backend:8000/api/.
+frontend/.dockerignore	Excludes node_modules, dist, .env.
+docker-compose.yml	Defines postgres, backend, frontend; uses host .env via env_file and overrides DATABASE_URL and CORS_ORIGINS for the backend.
+Run with Docker
+
+# From project root (ensure .env exists; copy from .env.example if needed)
+docker compose up --build
+App: http://localhost (frontend; nginx on 80).
+API: http://localhost:8000 or via http://localhost/api/....
+Seed the database once after first start:
+
+docker compose exec backend python seed.py
+Then use staff gate and login (e.g. admin@arckae.com / admin123) as in the README.
