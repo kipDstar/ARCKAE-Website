@@ -18,6 +18,11 @@ class TokenData(BaseModel):
     role: Optional[str] = None
 
 
+class StaffGateRequest(BaseModel):
+    email: EmailStr
+    access_key: str
+
+
 class UserBase(BaseModel):
     name: str
     email: EmailStr

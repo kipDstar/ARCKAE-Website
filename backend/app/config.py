@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     smtp_from: EmailStr | None = None
     smtp_use_tls: bool = True
 
+    # Staff access gate
+    staff_access_key: str | None = None
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

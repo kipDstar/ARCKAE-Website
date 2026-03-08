@@ -10,7 +10,7 @@ from ..auth import create_access_token, get_current_user, get_password_hash
 from ..config import get_settings
 from ..database import get_db
 from ..models import User
-from ..schemas import Token, UserCreate, UserRead
+from ..schemas import StaffGateRequest, Token, UserCreate, UserRead
 
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -83,4 +83,37 @@ def read_me(
     current_user: Annotated[User, Depends(get_current_user)],
 ):
     return current_user
+
+
+@router.post("/staff-gate")
+def staff_gate(
+    payload: StaffGateRequest,
+    db: Annotated[Session, Depends(get_db)],
+):
+    """
+    Lightweight pre-check before allowing staff to see the login screen.
+
+    - Verifies that the email belongs to an existing admin or counsellor
+    - Verifies a shared staff access key (configured via STAFF_ACCESS_KEY in .env)
+    """
+    if not settings.staff_access_key:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Staff access key is not configured on the server",
+        )
+
+    if payload.access_key != settings.staff_access_key:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid staff access key",
+        )
+
+    user = db.query(User).filter(User.email == payload.email).first()
+    if not user or user.role not in {"admin", "counsellor"}:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Email is not registered as staff",
+        )
+
+    return {"ok": True}
 
