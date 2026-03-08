@@ -10,6 +10,9 @@ import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
 import StudyOptions from "./pages/StudyOptions";
 import NotFound from "./pages/NotFound";
+import StaffGate from "./pages/StaffGate";
+import StaffLogin from "./pages/StaffLogin";
+import Dashboard from "./pages/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +28,9 @@ export const router = createBrowserRouter([
       { path: "contact", Component: Contact },
       { path: "faq", Component: FAQ },
       { path: "study-options", Component: StudyOptions },
+      { path: "staff", Component: StaffGate },
+      { path: "login", Component: StaffLogin },
+      { path: "dashboard", Component: Dashboard },
       { path: "*", Component: NotFound },
     ],
   },

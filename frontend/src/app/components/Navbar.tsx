@@ -39,6 +39,7 @@ export default function Navbar() {
     { name: "FAQ", path: "/faq" },
     { name: "Location", path: "/location" },
     { name: "Contact", path: "/contact" },
+    { name: "Staff", path: "/staff" },
   ];
 
   return (
