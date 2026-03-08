@@ -1,7 +1,12 @@
 from functools import lru_cache
+from pathlib import Path
 from typing import List
 
-from pydantic import AnyHttpUrl, BaseSettings, EmailStr, field_validator
+from pydantic import EmailStr, computed_field
+from pydantic_settings import BaseSettings
+
+# Project root (parent of backend/) so .env is found when running from backend/
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
 
 
 class Settings(BaseSettings):
@@ -17,8 +22,8 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60
 
-    # CORS / Frontend
-    cors_origins: List[AnyHttpUrl] = []
+    # CORS / Frontend (comma-separated string in .env, e.g. http://localhost:5173,http://127.0.0.1:5173)
+    cors_origins: str = ""
 
     # Email (SMTP)
     smtp_host: str | None = None
@@ -32,16 +37,18 @@ class Settings(BaseSettings):
     staff_access_key: str | None = None
 
     class Config:
-        env_file = ".env"
+        env_file = str(_PROJECT_ROOT / ".env")
         env_file_encoding = "utf-8"
-        case_sensitive = True
+        case_sensitive = False  # so DATABASE_URL in .env maps to database_url
+        extra = "ignore"  # ignore unknown keys in .env (e.g. comments or future vars)
 
-    @field_validator("cors_origins", mode="before")
-    @classmethod
-    def parse_cors_origins(cls, v: str | List[str]) -> List[str]:
-        if isinstance(v, str):
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
-        return v
+    @computed_field
+    @property
+    def cors_origins_list(self) -> List[str]:
+        """Parsed CORS origins for middleware (comma-separated string from env)."""
+        if not self.cors_origins:
+            return []
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
 
 @lru_cache

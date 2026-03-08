@@ -1,4 +1,5 @@
 from typing import Annotated, List
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -41,7 +42,7 @@ def create_service(
 
 @router.put("/{service_id}", response_model=ServiceRead)
 def update_service(
-    service_id: str,
+    service_id: UUID,
     payload: ServiceUpdate,
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[None, Depends(require_admin)],
@@ -62,7 +63,7 @@ def update_service(
 
 @router.delete("/{service_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_service(
-    service_id: str,
+    service_id: UUID,
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[None, Depends(require_admin)],
 ):

@@ -19,19 +19,19 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-[#4FA3D1] flex-shrink-0" />
-                <a href="mailto:winniecheruiyot1@gmail.com" className="text-sm hover:text-[#F47B20] transition-colors">
-                  winniecheruiyot1@gmail.com
+                <a href="mailto:arckae.int@gmail.com" className="text-sm hover:text-[#F47B20] transition-colors">
+                  arckae.int@gmail.com
                 </a>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-[#4FA3D1] flex-shrink-0" />
-                <p className="text-sm">+254 XXX XXX XXX</p>
+                <a href="tel:+254741001286" className="text-sm hover:text-[#F47B20] transition-colors">+254 741 001 286</a>
               </div>
               <div className="flex items-start space-x-3">
                 <Clock className="w-5 h-5 text-[#4FA3D1] flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-sm">Mon - Fri: 9:00 AM - 5:00 PM</p>
-                  <p className="text-sm">Sat: 10:00 AM - 2:00 PM</p>
+                  <p className="text-sm">Sat: 9:00 AM - 2:00 PM</p>
                 </div>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function Footer() {
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
-                href="https://wa.me/254XXXXXXXXX"
+                href="https://wa.me/254741001286"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-[#4FA3D1] rounded-full flex items-center justify-center hover:bg-[#F47B20] transition-all duration-300 hover:scale-110"

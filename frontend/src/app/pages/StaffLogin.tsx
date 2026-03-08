@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { useAuth } from "../components/AuthContext";
 
 export default function StaffLogin() {
   const [email, setEmail] = useState("");
@@ -11,6 +12,7 @@ export default function StaffLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,8 +33,14 @@ export default function StaffLogin() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("token", data.access_token);
-        // Redirect to dashboard
+        const token = data.access_token;
+        const meRes = await fetch("/api/auth/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (meRes.ok) {
+          const userData = await meRes.json();
+          login(token, userData);
+        }
         navigate("/dashboard");
       } else {
         setError("Invalid email or password");

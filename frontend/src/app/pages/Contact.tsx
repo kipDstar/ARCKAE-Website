@@ -44,7 +44,7 @@ export default function Contact() {
           current_education_level: formData.education,
           message: formData.message,
           appointment_date: formData.appointmentDate || null,
-          mode: formData.mode,
+          mode: formData.mode === "physical" ? "Physical" : "Virtual",
         }),
       });
 
@@ -410,7 +410,7 @@ export default function Contact() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="mailto:winniecheruiyot1@gmail.com"
+                href="mailto:arckae.int@gmail.com"
                 className="bg-[#F47B20] text-white px-8 py-4 rounded-full hover:bg-[#d66a1a] transition-all duration-300 hover:shadow-lg"
               >
                 Email Us

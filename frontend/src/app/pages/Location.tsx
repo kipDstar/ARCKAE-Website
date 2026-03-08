@@ -40,8 +40,6 @@ export default function Location() {
             referrerPolicy="no-referrer-when-downgrade"
             title="ARCKAE Office Location"
           ></iframe>
-        </motion.div>
-      </section>
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
               <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -49,6 +47,17 @@ export default function Location() {
               </pattern>
               <rect width="100%" height="100%" fill="url(#grid)" />
             </svg>
+          </div>
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+            <a
+              href="https://maps.app.goo.gl/15AmWCWNLPAggcbR7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-[#0B2C4D] text-white px-6 py-3 rounded-full shadow-lg hover:bg-[#F47B20] transition-colors font-semibold"
+            >
+              <Navigation className="w-5 h-5" />
+              Open in Google Maps
+            </a>
           </div>
         </motion.div>
       </section>
@@ -92,10 +101,10 @@ export default function Location() {
                   <div>
                     <h3 className="text-xl font-bold text-[#0B2C4D] mb-2">Email Us</h3>
                     <a 
-                      href="mailto:winniecheruiyot1@gmail.com"
+                      href="mailto:arckae.int@gmail.com"
                       className="text-[#4FA3D1] hover:text-[#F47B20] transition-colors"
                     >
-                      winniecheruiyot1@gmail.com
+                      arckae.int@gmail.com
                     </a>
                   </div>
                 </div>
@@ -106,7 +115,7 @@ export default function Location() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-[#0B2C4D] mb-2">Call Us</h3>
-                    <p className="text-gray-600">+254 XXX XXX XXX</p>
+                    <a href="tel:+254741001286" className="text-gray-600 hover:text-[#F47B20] transition-colors">+254 741 001 286</a>
                     <p className="text-sm text-gray-500 mt-1">Available during office hours</p>
                   </div>
                 </div>
@@ -119,7 +128,7 @@ export default function Location() {
                     <h3 className="text-xl font-bold text-[#0B2C4D] mb-2">Office Hours</h3>
                     <div className="space-y-1 text-gray-600">
                       <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
-                      <p>Saturday: 10:00 AM - 2:00 PM</p>
+                      <p>Saturday: 9:00 AM - 2:00 PM</p>
                       <p className="text-sm text-gray-500">Sunday: Closed</p>
                     </div>
                   </div>
@@ -162,7 +171,7 @@ export default function Location() {
                     Book a Consultation
                   </Link>
                   <a
-                    href="mailto:winniecheruiyot1@gmail.com"
+                    href="mailto:arckae.int@gmail.com"
                     className="block w-full bg-white/10 backdrop-blur-md text-white border-2 border-white px-8 py-4 rounded-full text-center hover:bg-white hover:text-[#0B2C4D] transition-all duration-300 font-semibold text-lg"
                   >
                     Send Email

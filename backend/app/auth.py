@@ -17,11 +17,18 @@ from .schemas import TokenData
 settings = get_settings()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
+oauth2_scheme_optional = OAuth2PasswordBearer(
+    tokenUrl="/api/auth/login",
+    auto_error=False,
+)
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def get_password_hash(password: str) -> str:
+    # bcrypt has a 72-byte limit; truncate to avoid errors with newer bcrypt versions
+    if len(password.encode("utf-8")) > 72:
+        password = password.encode("utf-8")[:72].decode("utf-8", errors="ignore")
     return pwd_context.hash(password)
 
 
@@ -103,6 +110,26 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     return user
+
+
+def get_current_user_optional(
+    token: Annotated[str | None, Depends(oauth2_scheme_optional)],
+    db: Annotated[Session, Depends(get_db)],
+) -> User | None:
+    """
+    Returns the current user if a valid Bearer token is provided; otherwise None.
+    Use this for endpoints that allow both authenticated and unauthenticated access
+    (e.g. register when no users exist yet).
+    """
+    if not token:
+        return None
+    try:
+        token_data = _decode_token(token)
+        if token_data.user_id is None:
+            return None
+        return get_user_by_id(db, token_data.user_id)
+    except HTTPException:
+        return None
 
 
 def require_admin(

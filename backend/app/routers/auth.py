@@ -1,12 +1,18 @@
 from datetime import timedelta
-from typing import Annotated
+from typing import Annotated, List
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from .. import auth
-from ..auth import create_access_token, get_current_user, get_password_hash
+from ..auth import (
+    create_access_token,
+    get_current_user,
+    get_current_user_optional,
+    get_password_hash,
+    require_admin,
+)
 from ..config import get_settings
 from ..database import get_db
 from ..models import User
@@ -43,7 +49,7 @@ def login(
 def register_user(
     payload: UserCreate,
     db: Annotated[Session, Depends(get_db)],
-    current_user: Annotated[User | None, Depends(get_current_user)] = None,
+    current_user: Annotated[User | None, Depends(get_current_user_optional)] = None,
 ):
     """
     Register a new user.
@@ -83,6 +89,15 @@ def read_me(
     current_user: Annotated[User, Depends(get_current_user)],
 ):
     return current_user
+
+
+@router.get("/users", response_model=List[UserRead])
+def list_users(
+    db: Annotated[Session, Depends(get_db)],
+    _: Annotated[User, Depends(require_admin)],
+):
+    """List all users. Admin only."""
+    return db.query(User).order_by(User.created_at.desc()).all()
 
 
 @router.post("/staff-gate")

@@ -1,4 +1,5 @@
 from typing import Annotated, List
+from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -85,7 +86,7 @@ def list_appointments(
 
 @router.put("/appointments/{appointment_id}", response_model=ContactFormRead)
 def update_appointment(
-    appointment_id: str,
+    appointment_id: UUID,
     payload: AppointmentUpdate,
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(require_admin_or_counsellor)],

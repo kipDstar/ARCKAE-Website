@@ -1,4 +1,5 @@
 from typing import Annotated, List
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -39,7 +40,7 @@ def create_faq(
 
 @router.put("/{faq_id}", response_model=FAQRead)
 def update_faq(
-    faq_id: str,
+    faq_id: UUID,
     payload: FAQUpdate,
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[None, Depends(require_admin)],
@@ -60,7 +61,7 @@ def update_faq(
 
 @router.delete("/{faq_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_faq(
-    faq_id: str,
+    faq_id: UUID,
     db: Annotated[Session, Depends(get_db)],
     _: Annotated[None, Depends(require_admin)],
 ):

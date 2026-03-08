@@ -1,0 +1,131 @@
+# ==============================
+# Environment & secrets (protected)
+# ==============================
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+*.key
+secrets/
+
+# ==============================
+# Python / Backend
+# ==============================
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+.Python
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg
+*.egg-info/
+.eggs/
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing & coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+
+# Type checkers & tools
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+
+# ==============================
+# Node / Frontend (incl. figma-design)
+# ==============================
+node_modules/
+**/node_modules/
+
+# Build outputs
+dist/
+**/dist/
+.next/
+out/
+.nuxt/
+.output/
+.vite/
+.turbo/
+
+# Logs and debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Lockfiles (optional: some teams commit these; uncomment to ignore)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# ==============================
+# IDE & editors
+# ==============================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ==============================
+# OS generated
+# ==============================
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ==============================
+# Logs & temporary
+# ==============================
+*.log
+logs/
+tmp/
+temp/
+.cache/
+
+# ==============================
+# Docker (local overrides only; Dockerfile kept)
+# ==============================
+docker-compose.override.yml
+.docker/
+
+# ==============================
+# Misc
+# ==============================
+*.bak
+*.tmp
+*.temp
+.vercel
+.netlify

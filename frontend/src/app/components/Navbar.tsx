@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import React from "react";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,10 +45,10 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 border-b border-gray-200/80 ${
         isScrolled
           ? "bg-white shadow-lg py-3"
-          : "bg-white/95 backdrop-blur-md py-4"
+          : "bg-white/98 backdrop-blur-md py-4"
       }`}
     >
       <div className="container mx-auto px-4 lg:px-8">

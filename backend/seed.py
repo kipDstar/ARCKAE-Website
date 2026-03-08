@@ -8,11 +8,11 @@ import os
 import sys
 from pathlib import Path
 
-# Add the app directory to the Python path
-sys.path.insert(0, str(Path(__file__).parent / "app"))
+# Add the backend directory to the Python path so "app" resolves to backend/app
+sys.path.insert(0, str(Path(__file__).parent))
 
 from sqlalchemy.orm import Session
-from app.database import SessionLocal, engine
+from app.database import Base, SessionLocal, engine
 from app.models import Service, FAQ, User
 from app.auth import get_password_hash
 
@@ -193,6 +193,9 @@ def seed_admin_user(db: Session):
 def main():
     """Main seeding function."""
     print("Seeding ARCKAE database...")
+
+    # Create tables if they don't exist (same as FastAPI app on startup)
+    Base.metadata.create_all(bind=engine)
 
     db = SessionLocal()
     try:

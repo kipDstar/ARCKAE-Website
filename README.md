@@ -2,10 +2,58 @@
 
 This repository contains the full‑stack implementation of the **ARCKAE Study Abroad Agency** website:
 
-- **Frontend**: React + TypeScript + Vite (in the `arckae` directory)
+- **Frontend**: React + TypeScript + Vite (in the `frontend` directory)
 - **Backend**: FastAPI + PostgreSQL + JWT auth (in the `backend` directory)
 
 The site targets students, parents, and young professionals seeking end‑to‑end study abroad support (IELTS training, career guidance, school applications, visa support, and post‑arrival services).
+
+---
+
+## Quick start (one-time setup)
+
+From the project root, run:
+
+```bash
+chmod +x scripts/setup.sh
+./scripts/setup.sh
+```
+
+This script will (you may be asked for your sudo password):
+
+1. Start PostgreSQL if installed
+2. Set the `postgres` user password to `postgres` so the default `.env` works
+3. Create the `arckae` database
+4. Copy `.env.example` to `.env` if you don’t have `.env` yet
+5. Create a Python venv in `backend`, install dependencies, create tables, and seed data
+
+Then start the app in **two terminals**:
+
+- **Terminal 1:** `cd backend && source .venv/bin/activate && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
+- **Terminal 2:** `cd frontend && npm install && npm run dev`
+
+Open **http://localhost:5173** in your browser.
+
+---
+
+## Staff access (all 3 account levels)
+
+After setup, the seed creates one **admin** user. Staff must pass the **staff gate** before the login page.
+
+| Level      | How to get an account | After login |
+|-----------|------------------------|-------------|
+| **Admin** | Seeded: `admin@arckae.com` / `admin123`. Or create via `POST /api/auth/register` when no users exist (no token), or create more admins when logged in as admin. | Full dashboard: appointments, services, FAQs, users. |
+| **Counsellor** | Admin creates via Dashboard → Users → Add User (role: Counsellor). | Dashboard: overview + appointments (only their assigned ones). |
+| **Visitor** | Admin creates via Dashboard → Users (role: Visitor). Or `POST /api/auth/register` with a valid admin token. | No dashboard access; used for non-staff accounts. |
+
+**Staff gate (before login):**
+
+1. Go to **/staff**.
+2. Enter a staff **email** (e.g. `admin@arckae.com`) and the **access key** from your `.env`: `STAFF_ACCESS_KEY`.  
+   Default in `.env.example` is `change_this_staff_key` — set this in `.env` and use the same value here.
+3. If the key matches and the email is an admin or counsellor, you are sent to **/login**.
+4. Log in with that user’s **email** and **password** (e.g. admin: `admin123`).
+
+**Summary:** Staff gate key = `STAFF_ACCESS_KEY` in `.env`. Admin login = `admin@arckae.com` / `admin123`. Change the admin password and `STAFF_ACCESS_KEY` in production.
 
 ---
 
@@ -46,9 +94,20 @@ This corresponds to:
 
 You can keep this default for local development or change it to match your own PostgreSQL setup.
 
+### When to create the database (order of steps)
+
+**Create the database before starting the backend.** The backend connects to PostgreSQL as soon as it starts; if the `arckae` database doesn’t exist yet, the app will fail to start.
+
+**Order:**
+
+1. Install and start PostgreSQL (if not already running).
+2. Create the database (see below).
+3. Optionally copy `.env.example` to `.env` and set `DATABASE_URL` if you use different credentials.
+4. Start the backend (`uvicorn app.main:app ...`). On first run it will create the tables inside `arckae`.
+
 ### Creating the database locally
 
-On a machine with PostgreSQL installed:
+On a machine with PostgreSQL installed, run **before** starting the backend:
 
 ```bash
 createdb arckae
@@ -77,19 +136,93 @@ CREATE DATABASE arckae;
 
 If SMTP settings are not configured, the backend will simply skip sending emails (no crash).
 
----
-
-## Running the Backend (FastAPI)
-
-From the project root:
+**Where is `.env`?** Copy it at the **project root** (where you see `frontend`, `backend`, `README.md`):
 
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+# From project root
+cp .env.example .env
 ```
+
+The backend loads this file whether you run uvicorn or the seed script from the `backend` folder.
+
+### What does "Active: active (exited)" mean for PostgreSQL?
+
+When you run `sudo service postgresql status`, you may see **Active: active (exited)**. That's normal: the main `postgresql` service starts the real database process and then exits. The database is still running. To double-check, run: `pg_isready -h localhost` (should print "accepting connections").
+
+### If you get “password authentication failed for user postgres”
+
+The default `DATABASE_URL` uses password `postgres`. If PostgreSQL rejects it, set that password:
+
+```bash
+sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+```
+
+Or use a different password and put it in `.env`:
+
+```text
+DATABASE_URL=postgresql+psycopg://postgres:YOUR_PASSWORD@localhost:5432/arckae
+```
+
+---
+
+## How to run the app (simple steps)
+
+You need **two terminals**: one for the backend, one for the frontend.
+
+**Quick copy-paste (after you have PostgreSQL and a `.env` file):**
+
+- **Terminal 1 (backend):**  
+  `cd backend && python3 -m venv .venv && source .venv/bin/activate && python3 -m pip install -r requirements.txt && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
+- **Terminal 2 (frontend):**  
+  `cd frontend && npm install && npm run dev`
+
+Then open **http://localhost:5173** in your browser.  
+*(If you get “pip not found”, use `python3 -m pip` instead of `pip` in the step-by-step section below.)*
+
+---
+
+### Terminal 1 — Backend (API server)
+
+Run these commands **one at a time** in order:
+
+| Step | Command | What it does |
+|------|---------|--------------|
+| 1 | `cd backend` | Go into the backend folder |
+| 2 | `python3 -m venv .venv` | Create a virtual environment (installs Python packages here only) |
+| 3 | `source .venv/bin/activate` | Turn on the virtual environment (your prompt may show `(.venv)`) |
+| 4 | `python3 -m pip install -r requirements.txt` | Install backend dependencies (FastAPI, database, etc.) |
+| 5 | `uvicorn app.main:app --reload --host 0.0.0.0 --port 8000` | Start the API server |
+
+When you see something like `Uvicorn running on http://0.0.0.0:8000`, the backend is running. Leave this terminal open.
+
+**If step 4 says "pip not found":** you can install pip with `sudo apt install python3-pip`, or just use `python3 -m pip install -r requirements.txt` (step 4 already uses this).
+
+**If `uvicorn` says "not found":** make sure you ran step 3 (activate the venv), then run step 4 again. Uvicorn is installed by step 4.
+
+---
+
+### Terminal 2 — Frontend (website)
+
+Open a **new** terminal. Run these **one at a time**:
+
+| Step | Command | What it does |
+|------|---------|--------------|
+| 1 | `cd frontend` | Go into the frontend folder |
+| 2 | `npm install` | Install frontend dependencies |
+| 3 | `npm run dev` | Start the website dev server |
+
+When you see something like `Local: http://localhost:5173/`, open that URL in your browser. The site will talk to the backend on port 8000 automatically.
+
+---
+
+### Optional: database and first-time setup
+
+- **PostgreSQL:** The backend expects a database. If you don’t have one yet, create it (e.g. `createdb arckae` if you have PostgreSQL), and set `DATABASE_URL` in a `.env` file in the project root (copy from `.env.example`).
+- **Seed data:** From the project root, run `cd backend && source .venv/bin/activate && python3 seed.py` to load sample services, FAQs, and an admin user.
+
+---
+
+## Backend API (reference)
 
 The API will be available at `http://localhost:8000`.
 
@@ -106,19 +239,7 @@ Key routes:
 
 ---
 
-## Running the Frontend (React)
-
-From the project root:
-
-```bash
-cd arckae
-npm install
-npm run dev
-```
-
-The dev server runs at `http://localhost:5173`.
-
-The frontend will be wired to call the FastAPI backend (for example at `http://localhost:8000`) for services, FAQs, contact/appointment submissions, and staff login.
+*(Frontend run steps are in the "How to run the app" section above — use the `frontend` folder and `npm run dev`.)*
 
 ---
 
