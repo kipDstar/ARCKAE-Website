@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { Mail, MapPin, Phone, Clock, Facebook, Instagram, Linkedin, MessageCircle } from "lucide-react";
+import React from "react";
 
 export default function Footer() {
   return (
@@ -137,7 +138,7 @@ export default function Footer() {
               </a>
             </div>
             <div className="mt-6">
-              <p className="text-sm mb-3">Connect with Winnie Jeptum Cheruiyot</p>
+              <p className="text-sm mb-3">Connect with us on our socials</p>
               <Link
                 to="/contact"
                 className="inline-block bg-[#F47B20] text-white px-5 py-2 rounded-full text-sm hover:bg-[#d66a1a] transition-all duration-300 hover:shadow-lg"
@@ -152,7 +153,7 @@ export default function Footer() {
         <div className="border-t border-white/20 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-gray-300">
-              © 2026 ARCKAE Study Abroad Agency. All Rights Reserved.
+              © 2026 ARCKAE Study Abroad Agency. All Rights Reserved. Developed by Zenith Tech Solutions
             </p>
             <div className="flex items-center space-x-6">
               <Link to="#" className="text-sm text-gray-300 hover:text-[#F47B20] transition-colors">
