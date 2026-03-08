@@ -1,0 +1,186 @@
+✅ FULL MASTER PROMPT — ARCKAE WEBSITE (Python Backend, Admin/Counsellor Roles, GitHub Integration)
+Role / Objective:
+You are a senior full-stack developer and DevOps-aware engineer. Build a production-ready, interactive website for ARCKAE Study Abroad Agency with React frontend, Python backend (FastAPI), PostgreSQL database, role-based users (Admin, Counsellor, Visitor), and full Git workflow making good commits for reasonable code chnages.
+Your task is to generate real, deployable code that is fully functional.
+________________________________________
+1️⃣ Project Overview
+Agency Name: ARCKAE Study Abroad Agency
+Location: Iten Town, Kalyet Center, 2nd Floor, Kenya ( make a google maps link for this location for the location page)
+Contact: arckae.int@gmail.com Tel No. : 0741001286 
+Target Audience: Students, Parents, Young Professionals
+Main Services: End-to-End Study Abroad Support, IELTS training, Career Guidance, School Applications, Visa application Support, Pre/Post Departure orientation, Flight booking support, accomadation booking 
+Auxiliary Services: Accommodation Booking, Employment Advisory, Post-Arrival Support, Change of Institution, Financial Advisory
+________________________________________
+2️⃣ Technical Stack
+Frontend:
+•	React (or Next.js)
+•	TailwindCSS / Chakra UI
+•	Framer Motion / GSAP for animations
+•	React Router for navigation
+Backend:
+•	Python with FastAPI
+•	PostgreSQL with SQLAlchemy ORM
+•	JWT-based authentication
+•	Role-based access (Admin, Counsellor, Visitor)
+Email & Integrations:
+•	SendGrid or SMTP for contact & appointment notifications
+•	Google Maps API for Location page
+Security & Best Practices:
+•	HTTPS-ready
+•	Password hashing & role-based authorization
+•	Input validation & sanitization
+•	CAPTCHA for forms
+Deployment:
+•	Dockerized
+•	Environment variables in .env
+•	Ready for Vercel, AWS, Render
+________________________________________
+3️⃣ Roles
+1.	Admin: Full access to CRUD services, FAQs, users, appointments
+2.	Counsellor: Access to appointments, update status, limited editing
+3.	Visitor/Student: Can submit forms, book appointments
+The website should by default be for visitors hence no need for visitors to login or sign up, the adminand counsellors can have an option in the side menu for staff then when clicked the system first does an email check or a secret key issued to admin and counsellors to confirm that only them can access the other role access. If not listed or not the passkey the user is sent back to the landing page. If accurate they can now proceed to the login page
+________________________________________
+4️⃣ Database Schema
+Users
+{
+  "id": "uuid",
+  "name": "string",
+  "email": "string",
+  "password_hash": "string",
+  "role": "admin|counsellor|visitor",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+ContactFormSubmissions
+{
+  "id": "uuid",
+  "full_name": "string",
+  "email": "string",
+  "phone": "string",
+  "intended_destination": "string",
+  "preferred_course": "string",
+  "current_education_level": "string",
+  "message": "text",
+  "appointment_date": "date",
+  "mode": "Physical|Virtual",
+  "submitted_at": "timestamp",
+  "assigned_counsellor_id": "uuid|null",
+  "status": "pending|confirmed|completed"
+}
+Services
+{
+  "id": "uuid",
+  "name": "string",
+  "category": "main|auxiliary",
+  "icon_url": "string",
+  "short_description": "string",
+  "long_description": "string",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+FAQ
+{
+  "id": "uuid",
+  "question": "string",
+  "answer": "string",
+  "category": "Getting Started|Admissions|IELTS|Visa & Travel|After Arrival",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
+}
+________________________________________
+5️⃣ API Endpoints (FastAPI Example)
+Auth
+•	POST /api/auth/login
+•	POST /api/auth/register (admin only)
+•	GET /api/auth/me
+Services
+•	GET /api/services
+•	POST /api/services (admin)
+•	PUT /api/services/:id (admin)
+•	DELETE /api/services/:id (admin)
+FAQ
+•	GET /api/faqs
+•	POST /api/faqs (admin)
+•	PUT /api/faqs/:id (admin)
+•	DELETE /api/faqs/:id (admin)
+Contact Form / Appointments
+•	POST /api/contact
+•	GET /api/appointments (admin/counsellor)
+•	PUT /api/appointments/:id (admin/counsellor)
+________________________________________
+6️⃣ Frontend Component Structure
+•	Navbar – sticky, dropdowns
+•	HeroCarousel – scrollable slides, CTA buttons
+•	ServiceCard – flippable cards
+•	FAQAccordion – filterable, searchable
+•	ContactForm – interactive with calendar picker
+•	Footer – multi-column, social links
+•	LocationMap – Google Maps embed
+•	Button, Input, Card, Accordion – reusable
+________________________________________
+7️⃣ Pages
+1.	Landing Page – Hero + carousel + CTA
+2.	About Us – Founder, mission, trust badges
+3.	Services – Main & auxiliary services with flippable cards
+4.	We Also Provide – Auxiliary services, CTA banner
+5.	Destinations – Highlight Australia + benefits
+6.	Location – Google Map + contact info
+7.	Contact / Book Appointment – Form with validation & calendar picker
+8.	FAQ – Accordion, searchable, category filter
+________________________________________
+8️⃣ Interactivity & UX
+•	Smooth scroll & hover animations
+•	Flippable cards & accordion animations
+•	Micro-interactions for forms
+•	Mobile-responsive, accessible
+•	Clear CTA on every page
+________________________________________
+9️⃣ Developer Instructions & Breakdown
+1.	Frontend: React + TailwindCSS, reusable components, Framer Motion animations
+2.	Backend: Python FastAPI, JWT auth, role-based access
+3.	Database: PostgreSQL, SQLAlchemy models
+4.	Admin panel: CRUD for Services, FAQs, Users, Appointments
+5.	Email notifications: contact forms & appointment confirmations
+6.	Deployment: Dockerfile + .env + instructions for Vercel/AWS/Render
+7.	Version Control: Commit every reasonable change, push to user’s GitHub repository with meaningful commit messages
+8.	Documentation: Include README with setup instructions, developer breakdown of architecture, file structure, environment variables, deployment, and usage
+________________________________________
+10️⃣ Git & Workflow Instructions
+•	Commit every meaningful change (new page, new component, API route, DB migration)
+•	Push automatically to GitHub repository: github.com/<your-username>/arckae-website
+•	Use descriptive commit messages (e.g., “Add FAQ Accordion Component” or “Implement JWT authentication”)
+•	Maintain separate branches for major features if possible
+________________________________________
+11️⃣ Seed Data Example
+Services
+[
+  {
+    "name": "End-to-End Study Abroad Support",
+    "category": "main",
+    "icon_url": "/icons/support.svg",
+    "short_description": "Complete guidance from application to post-arrival.",
+    "long_description": "We guide students through school selection, application, visa, pre-departure and post-arrival orientation."
+  },
+  {
+    "name": "IELTS Training",
+    "category": "main",
+    "icon_url": "/icons/ielts.svg",
+    "short_description": "Prepare for IELTS exams with expert guidance.",
+    "long_description": "Tailored IELTS coaching to help students achieve required scores for admission."
+  }
+]
+FAQ
+[
+  {
+    "question": "Is the initial consultation free?",
+    "answer": "Yes, ARCKAE provides a free consultation to evaluate student goals and recommend study options.",
+    "category": "Getting Started"
+  },
+  {
+    "question": "Can you help with visa applications?",
+    "answer": "Yes, we guide students on all required documentation and application procedures to maximize approval chances.",
+    "category": "Visa & Travel"
+  }
+]
+
