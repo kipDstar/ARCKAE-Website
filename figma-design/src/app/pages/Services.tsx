@@ -1,65 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "motion/react";
 import { GraduationCap, BookOpen, Users, FileCheck, Globe, Plane, HeartHandshake } from "lucide-react";
 import { Link } from "react-router";
 
-interface Service {
-  id: string;
-  name: string;
-  category: string;
-  icon_url: string;
-  short_description: string;
-  long_description: string;
-}
-
-const iconMap = {
-  "support.svg": GraduationCap,
-  "ielts.svg": BookOpen,
-  "career.svg": Users,
-  "applications.svg": FileCheck,
-  "visa.svg": Globe,
-  "orientation.svg": Plane,
-  "flight.svg": Plane,
-  "accommodation.svg": HeartHandshake,
-  "employment.svg": Users,
-  "post-arrival.svg": HeartHandshake,
-  "change.svg": FileCheck,
-  "finance.svg": HeartHandshake,
-};
-
-export default function Services() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
-
-  useEffect(() => {
-    fetch("/api/services")
-      .then((res) => res.json())
-      .then((data) => {
-        setServices(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Failed to fetch services:", error);
-        setLoading(false);
-      });
-  }, []);
-
-  const categories = ["all", ...Array.from(new Set(services.map((service) => service.category)))];
-
-  const filteredServices = selectedCategory === "all" 
-    ? services 
-    : services.filter((service) => service.category === selectedCategory);
-
-  if (loading) {
-    return (
-      <div className="pt-24 pb-20">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center">Loading services...</div>
-        </div>
-      </div>
-    );
-  }
+const services = [
   {
     icon: GraduationCap,
     title: "End-to-End Study Abroad Support",
