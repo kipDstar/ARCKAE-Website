@@ -29,15 +29,28 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setShowSuccess(true);
-      toast.success("Consultation scheduled successfully!");
-      
-      // Reset form after 3 seconds
-      setTimeout(() => {
-        setShowSuccess(false);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          full_name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          intended_destination: formData.destination,
+          preferred_course: formData.course,
+          current_education_level: formData.education,
+          message: formData.message,
+          appointment_date: formData.appointmentDate || null,
+          mode: formData.mode,
+        }),
+      });
+
+      if (response.ok) {
+        setShowSuccess(true);
+        toast.success("Consultation scheduled successfully!");
         setFormData({
           fullName: "",
           email: "",
@@ -49,8 +62,15 @@ export default function Contact() {
           appointmentDate: "",
           mode: "virtual",
         });
-      }, 3000);
-    }, 1500);
+        setTimeout(() => setShowSuccess(false), 3000);
+      } else {
+        toast.error("Failed to submit form. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Network error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

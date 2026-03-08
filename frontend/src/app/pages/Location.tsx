@@ -28,26 +28,20 @@ export default function Location() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full h-96 md:h-[500px] relative bg-gray-200"
+          className="w-full h-96 md:h-[500px] relative"
         >
-          {/* Google Maps Embed Mockup */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <MapPin className="w-20 h-20 text-[#F47B20] mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-[#0B2C4D] mb-2">Iten Town - Kalyet Center</h3>
-              <p className="text-gray-600 mb-4">2nd Floor, Kenya</p>
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=Iten+Town+Kalyet+Center"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center space-x-2 bg-[#F47B20] text-white px-6 py-3 rounded-full hover:bg-[#d66a1a] transition-all duration-300 hover:shadow-lg"
-              >
-                <Navigation className="w-5 h-5" />
-                <span>Open in Google Maps</span>
-              </a>
-            </div>
-          </div>
-          {/* Background pattern to simulate map */}
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.756!2d35.508!3d0.531!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMC41MzHCsDAwLjMwOCcwJzAwLjAiTiAzNcKwMzAnMjguOCJF!5e0!3m2!1sen!2ske!4v1690000000000!5m2!1sen!2ske"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title="ARCKAE Office Location"
+          ></iframe>
+        </motion.div>
+      </section>
           <div className="absolute inset-0 opacity-10 pointer-events-none">
             <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
               <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "motion/react";
 import {
   Accordion,
@@ -8,7 +9,54 @@ import {
 import { MessageCircle, HelpCircle, BookOpen, Plane, GraduationCap, FileText } from "lucide-react";
 import ScrollToTopOnMount from "../components/ScrollToTopOnMount";
 
-const faqCategories = [
+interface FAQ {
+  id: string;
+  question: string;
+  answer: string;
+  category: string;
+}
+
+const categoryIcons = {
+  "Getting Started": HelpCircle,
+  "Admissions": FileText,
+  "IELTS": BookOpen,
+  "Visa & Travel": Plane,
+  "After Arrival": GraduationCap,
+};
+
+export default function FAQ() {
+  const [faqs, setFaqs] = useState<FAQ[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+
+  useEffect(() => {
+    fetch("/api/faqs")
+      .then((res) => res.json())
+      .then((data) => {
+        setFaqs(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch FAQs:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  const categories = ["all", ...Array.from(new Set(faqs.map((faq) => faq.category)))];
+
+  const filteredFaqs = selectedCategory === "all" 
+    ? faqs 
+    : faqs.filter((faq) => faq.category === selectedCategory);
+
+  if (loading) {
+    return (
+      <div className="pt-24 pb-20">
+        <div className="container mx-auto px-4 lg:px-8">
+          <div className="text-center">Loading FAQs...</div>
+        </div>
+      </div>
+    );
+  }
   {
     category: "General Questions",
     icon: HelpCircle,
