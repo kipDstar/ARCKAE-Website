@@ -35,6 +35,31 @@ Open **http://localhost:5173** in your browser.
 
 ---
 
+## Deploying on Render
+
+This repo has **two** Dockerfiles (`backend/Dockerfile` and `frontend/Dockerfile`). Render only lets you set one “Dockerfile path” per service, so you use **two separate Web Services** (and optionally one Postgres) from the same repo.
+
+**Do not** set the Dockerfile path to `docker-compose.yml` — Render will try to parse it as a Dockerfile and fail.
+
+**Option A — Blueprint (recommended)**  
+Use the included `render.yaml` so both services and the DB are defined in one place:
+
+1. In the [Render Dashboard](https://dashboard.render.com), connect the repo and choose **Blueprint**.
+2. Point Render at the repo; it will detect `render.yaml` and create:
+   - **arckae-backend** (Docker, root dir `backend`)
+   - **arckae-frontend** (Docker, root dir `frontend`)
+   - **arckae-db** (Postgres)
+3. When prompted, set **CORS_ORIGINS** for the backend to your frontend URL (e.g. `https://arckae-frontend-xxxx.onrender.com`).
+4. After the first deploy, run the seed once via **Shell** on the backend service: `python seed.py`.
+
+**Option B — Manual**  
+Create two Web Services from the same repo:
+
+- **Backend:** Root Directory = `backend`, Dockerfile Path = `Dockerfile`. Add a Postgres (or external DB) and set `DATABASE_URL`.
+- **Frontend:** Root Directory = `frontend`, Dockerfile Path = `Dockerfile`. The frontend gets the backend URL via Render’s private networking (see `render.yaml`).
+
+---
+
 ## Docker (full stack)
 
 From the project root, with a `.env` file in place (copy from `.env.example` if needed):
