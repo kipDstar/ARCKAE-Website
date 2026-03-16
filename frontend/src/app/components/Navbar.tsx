@@ -26,21 +26,21 @@ export default function Navbar() {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About Us", path: "/about" },
-    { 
-      name: "Services", 
-      path: "https://arckae-backend.onrender.com/api/services",
+    {
+      name: "Services",
+      path: "/services",
       hasDropdown: true,
       subLinks: [
-        { name: "Core Services", path: "https://arckae-backend.onrender.com/api/services" },
-        { name: "We Also Provide", path: "/we-also-provide" }
-      ]
+        { name: "Core Services", path: "/services" },
+        { name: "We Also Provide", path: "/we-also-provide" },
+      ],
     },
     { name: "Study Options", path: "/study-options" },
     { name: "Destinations", path: "/destinations" },
-    { name: "FAQ", path: "https://arckae-backend.onrender.com/api/faqs" },
+    { name: "FAQ", path: "/faq" },
     { name: "Location", path: "/location" },
-    { name: "Contact", path: "https://arckae-backend.onrender.com/api/contact" },
-    { name: "Staff", path: "https://arckae-backend.onrender.com/api/staff" },
+    { name: "Contact", path: "/contact" },
+    { name: "Staff", path: "/staff" },
   ];
 
   return (

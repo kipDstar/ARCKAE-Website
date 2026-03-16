@@ -21,7 +21,7 @@ export default function StaffLogin() {
     setError("");
 
     try {
-      const response = await fetch("https://arckae-backend.onrender.com/api/auth/login", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -35,14 +35,16 @@ export default function StaffLogin() {
       if (response.ok) {
         const data = await response.json();
         const token = data.access_token;
-        const meRes = await fetch("https://arckae-backend.onrender.com/api/auth/me", {
+        const meRes = await fetch("/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (meRes.ok) {
           const userData = await meRes.json();
           login(token, userData);
+          navigate("/dashboard");
+        } else {
+          setError("Unable to verify user. Please try again.");
         }
-        navigate("/dashboard");
       } else {
         setError("Invalid email or password");
       }

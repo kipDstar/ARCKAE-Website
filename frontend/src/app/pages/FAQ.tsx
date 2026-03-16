@@ -37,7 +37,7 @@ export default function FAQ() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("https://arckae-backend.onrender.com/api/faqs")
+    fetch("/api/faqs")
       .then((res) => res.json())
       .then((data) => {
         setFaqs(data);

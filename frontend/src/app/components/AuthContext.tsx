@@ -27,8 +27,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      // Verify token and get user
-      fetch("https://arckae-backend.onrender.com/api/auth/me", {
+      // Verify token and get user against the same origin (/api is proxied in dev/prod)
+      fetch("/api/auth/me", {
         headers: {
           Authorization: `Bearer ${storedToken}`,
         },
