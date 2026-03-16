@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import get_settings
-from .database import Base, engine
+from .database import Base, SessionLocal, engine
+from .models import FAQ, Service, User
 from .routers import auth as auth_router
 from .routers import contact as contact_router
 from .routers import faqs as faqs_router
@@ -10,6 +11,22 @@ from .routers import services as services_router
 
 
 settings = get_settings()
+
+
+def _maybe_seed() -> None:
+    """Run seed.main() once if the database is empty."""
+    # Import here to avoid circular imports at module load time
+    import seed
+
+    db = SessionLocal()
+    try:
+        has_service = db.query(Service).first() is not None
+        has_faq = db.query(FAQ).first() is not None
+        has_admin = db.query(User).filter(User.role == "admin").first() is not None
+        if not (has_service or has_faq or has_admin):
+            seed.main()
+    finally:
+        db.close()
 
 
 def create_app() -> FastAPI:
@@ -26,6 +43,7 @@ def create_app() -> FastAPI:
 
     # Create tables (for simple setups; for production consider migrations)
     Base.metadata.create_all(bind=engine)
+    _maybe_seed()
 
     app.include_router(auth_router.router)
     app.include_router(services_router.router)
@@ -40,4 +58,3 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-
