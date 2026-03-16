@@ -15,6 +15,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import ScrollToTopOnMount from "../components/ScrollToTopOnMount";
+import React from "react";
 
 interface FAQItem {
   id: string;
