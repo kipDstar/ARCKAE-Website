@@ -11,6 +11,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router";
+import React from "react";
 
 interface Service {
   id: string;
@@ -113,7 +114,7 @@ export default function Services() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/services")
+    fetch("https://arckae-backend.onrender.com/api/services")
       .then((res) => res.json())
       .then((data) => {
         setServices(data);

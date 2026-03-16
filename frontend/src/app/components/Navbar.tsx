@@ -28,19 +28,19 @@ export default function Navbar() {
     { name: "About Us", path: "/about" },
     { 
       name: "Services", 
-      path: "/services",
+      path: "https://arckae-backend.onrender.com/api/services",
       hasDropdown: true,
       subLinks: [
-        { name: "Core Services", path: "/services" },
+        { name: "Core Services", path: "https://arckae-backend.onrender.com/api/services" },
         { name: "We Also Provide", path: "/we-also-provide" }
       ]
     },
     { name: "Study Options", path: "/study-options" },
     { name: "Destinations", path: "/destinations" },
-    { name: "FAQ", path: "/faq" },
+    { name: "FAQ", path: "https://arckae-backend.onrender.com/api/faqs" },
     { name: "Location", path: "/location" },
-    { name: "Contact", path: "/contact" },
-    { name: "Staff", path: "/staff" },
+    { name: "Contact", path: "https://arckae-backend.onrender.com/api/contact" },
+    { name: "Staff", path: "https://arckae-backend.onrender.com/api/staff" },
   ];
 
   return (

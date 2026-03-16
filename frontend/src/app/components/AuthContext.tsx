@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React from "react";
 
 interface User {
   id: string;
@@ -27,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       // Verify token and get user
-      fetch("/api/auth/me", {
+      fetch("https://arckae-backend.onrender.com/api/auth/me", {
         headers: {
           Authorization: `Bearer ${storedToken}`,
         },

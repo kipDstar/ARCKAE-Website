@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import React from "react";
 
 export default function StaffGate() {
   const [email, setEmail] = useState("");
@@ -18,7 +19,7 @@ export default function StaffGate() {
     setError("");
 
     try {
-      const response = await fetch("/api/auth/staff-gate", {
+      const response = await fetch("https://arckae-backend.onrender.com/api/auth/staff-gate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
