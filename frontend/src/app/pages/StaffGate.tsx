@@ -19,7 +19,7 @@ export default function StaffGate() {
     setError("");
 
     try {
-      const response = await fetch("arckae-backend/api/auth/staff-gate", {
+      const response = await fetch("/api/auth/staff-gate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

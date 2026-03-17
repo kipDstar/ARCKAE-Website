@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router";
 import { motion } from "motion/react";
 import { ChevronLeft, ChevronRight, GraduationCap, BookOpen, Users, FileCheck, Plane, Globe } from "lucide-react";
+import React from "react";
 
 const carouselSlides = [
   {

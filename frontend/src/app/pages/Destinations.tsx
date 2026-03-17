@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { GraduationCap, Briefcase, Globe, TrendingUp, Users, Award, MapPin, Calendar } from "lucide-react";
 import { Link } from "react-router";
+import React from "react";
 
 export default function Destinations() {
   return (

@@ -41,6 +41,7 @@ import {
   AlertDialogTitle,
 } from "../components/ui/alert-dialog";
 import { toast } from "sonner";
+import React from "react";
 
 interface Appointment {
   id: string;

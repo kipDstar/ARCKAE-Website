@@ -114,7 +114,7 @@ export default function Services() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("backend/api/services")
+    fetch("/api/services")
       .then((res) => res.json())
       .then((data) => {
         setServices(data);

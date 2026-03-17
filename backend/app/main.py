@@ -23,6 +23,7 @@ def _maybe_seed() -> None:
         has_service = db.query(Service).first() is not None
         has_faq = db.query(FAQ).first() is not None
         has_admin = db.query(User).filter(User.role == "admin").first() is not None
+        # Seed only when the database is completely empty (no services, no FAQs, no admin)
         if not (has_service or has_faq or has_admin):
             seed.main()
     finally:

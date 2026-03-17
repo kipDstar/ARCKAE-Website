@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { Home, Briefcase, MapPin, Building2, DollarSign, Phone } from "lucide-react";
 import { Link } from "react-router";
+import React from "react";
 
 const auxiliaryServices = [
   {
