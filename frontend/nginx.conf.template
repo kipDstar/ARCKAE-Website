@@ -4,16 +4,19 @@ server {
     root /usr/share/nginx/html;
     index index.html;
 
-    # SPA: fallback to index.html for client-side routes
+    # Render's internal DNS resolver
+    resolver 127.0.0.11 valid=30s;
+
     location / {
         try_files $uri $uri/ /index.html;
     }
 
-    # Proxy API to backend
     location /api/ {
-        # The ${} syntax is safer for envsubst
-        proxy_pass http://${BACKEND_HOSTPORT};
+        # Setting the variable here prevents Nginx from failing at startup 
+        # if the backend host isn't immediately reachable.
+        set $backend_upstream http://${BACKEND_HOSTPORT};
         
+        proxy_pass $backend_upstream;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
