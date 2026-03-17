@@ -25,11 +25,8 @@ services:
     rootDir: frontend
     dockerfilePath: ./Dockerfile
     envVars:
-      - key: BACKEND_HOSTPORT
-        fromService:
-          name: arckae-backend
-          type: web
-          property: hostport
+      - key: BACKEND_ORIGIN
+        value: http://arckae-backend.onrender.com
 
 databases:
   - name: arckae-db
