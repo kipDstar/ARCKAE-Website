@@ -19,7 +19,7 @@ from ..models import User
 from ..schemas import StaffGateRequest, Token, UserCreate, UserRead
 
 
-router = APIRouter(prefix="/api/auth", tags=["auth"])
+router = APIRouter(tags=["auth"])
 
 settings = get_settings()
 

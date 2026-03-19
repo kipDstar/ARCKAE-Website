@@ -15,10 +15,10 @@ from ..schemas import (
 )
 
 
-router = APIRouter(prefix="/api", tags=["contact"])
+router = APIRouter(tags=["contact"])
 
 
-@router.post("/contact", response_model=ContactFormRead, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=ContactFormRead, status_code=status.HTTP_201_CREATED)
 def submit_contact_form(
     payload: ContactFormCreate,
     background_tasks: BackgroundTasks,

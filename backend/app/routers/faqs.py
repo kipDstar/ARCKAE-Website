@@ -10,7 +10,7 @@ from ..models import FAQ
 from ..schemas import FAQCreate, FAQRead, FAQUpdate
 
 
-router = APIRouter(prefix="/api/faqs", tags=["faqs"])
+router = APIRouter(tags=["faqs"])
 
 
 @router.get("", response_model=List[FAQRead])
