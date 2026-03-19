@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion } from "motion/react";
+import { getApiUrl } from "../utils/api";
 import {
   Accordion,
   AccordionContent,
@@ -37,7 +38,7 @@ export default function FAQ() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/faqs")
+    fetch(getApiUrl("/api/faqs"))
       .then((res) => res.json())
       .then((data) => {
         setFaqs(data);

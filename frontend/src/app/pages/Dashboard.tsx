@@ -1,6 +1,7 @@
 import { useAuth } from "../components/AuthContext";
 import { useNavigate } from "react-router";
 import { useEffect, useState, useCallback } from "react";
+import { getApiUrl } from "../utils/api";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs";
@@ -96,24 +97,24 @@ export default function Dashboard() {
 
   const loadAppointments = useCallback(async () => {
     if (!token) return;
-    const url = statusFilter ? `/api/appointments?status_filter=${statusFilter}` : "/api/appointments";
+    const url = statusFilter ? getApiUrl(`/api/appointments?status_filter=${statusFilter}`) : getApiUrl("/api/appointments");
     const res = await fetch(url, { headers: authHeaders(token) });
     if (res.ok) setAppointments(await res.json());
   }, [token, statusFilter]);
 
   const loadServices = useCallback(async () => {
-    const res = await fetch("/api/services");
+    const res = await fetch(getApiUrl("/api/services"));
     if (res.ok) setServices(await res.json());
   }, []);
 
   const loadFaqs = useCallback(async () => {
-    const res = await fetch("/api/faqs");
+    const res = await fetch(getApiUrl("/api/faqs"));
     if (res.ok) setFaqs(await res.json());
   }, []);
 
   const loadUsers = useCallback(async () => {
     if (!token || !isAdmin) return;
-    const res = await fetch("/api/auth/users", { headers: authHeaders(token) });
+    const res = await fetch(getApiUrl("/api/auth/users"), { headers: authHeaders(token) });
     if (res.ok) setUsers(await res.json());
   }, [token, isAdmin]);
 
@@ -132,7 +133,7 @@ export default function Dashboard() {
 
   const updateAppointment = async (id: string, data: { status?: string; assigned_counsellor_id?: string | null }) => {
     if (!token) return;
-    const res = await fetch(`/api/appointments/${id}`, {
+    const res = await fetch(getApiUrl(`/api/appointments/${id}`), {
       method: "PUT",
       headers: authHeaders(token),
       body: JSON.stringify(data),
@@ -377,7 +378,7 @@ function ServicesTab({
       ...form,
       icon_url: form.icon_url || null,
     };
-    const url = editing ? `/api/services/${editing.id}` : "/api/services";
+    const url = editing ? getApiUrl(`/api/services/${editing.id}`) : getApiUrl("/api/services");
     const method = editing ? "PUT" : "POST";
     const res = await fetch(url, {
       method,
@@ -394,7 +395,7 @@ function ServicesTab({
 
   const remove = async (id: string) => {
     if (!token) return;
-    const res = await fetch(`/api/services/${id}`, {
+    const res = await fetch(getApiUrl(`/api/services/${id}`), {
       method: "DELETE",
       headers: authHeaders(token),
     });
@@ -582,7 +583,7 @@ function FaqsTab({
   const save = async () => {
     if (!token) return;
     setSaving(true);
-    const url = editing ? `/api/faqs/${editing.id}` : "/api/faqs";
+    const url = editing ? getApiUrl(`/api/faqs/${editing.id}`) : getApiUrl("/api/faqs");
     const method = editing ? "PUT" : "POST";
     const res = await fetch(url, {
       method,
@@ -599,7 +600,7 @@ function FaqsTab({
 
   const remove = async (id: string) => {
     if (!token) return;
-    const res = await fetch(`/api/faqs/${id}`, {
+    const res = await fetch(getApiUrl(`/api/faqs/${id}`), {
       method: "DELETE",
       headers: authHeaders(token),
     });
@@ -758,7 +759,7 @@ function UsersTab({
       return;
     }
     setSaving(true);
-    const res = await fetch("/api/auth/register", {
+    const res = await fetch(getApiUrl("/api/auth/register"), {
       method: "POST",
       headers: authHeaders(token),
       body: JSON.stringify(form),

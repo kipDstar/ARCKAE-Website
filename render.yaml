@@ -14,22 +14,20 @@ services:
         fromDatabase:
           name: arckae-db
           property: connectionString
-      # Frontend URL for CORS - get from frontend service
+      # Frontend URL for CORS - allow frontend to make direct API calls
       - key: CORS_ORIGINS
         fromService:
           name: arckae-frontend
           type: web
           property: url
 
-  # Frontend (nginx serving SPA, proxies /api to backend)
+  # Frontend (nginx serving SPA + static files)
+  # Direct API calls to backend use CORS
   - type: web
     runtime: docker
     name: arckae-frontend
     rootDir: frontend
     dockerfilePath: ./Dockerfile
-    envVars:
-      - key: BACKEND_URL
-        value: arckae-backend.onrender.com
 
 databases:
   - name: arckae-db

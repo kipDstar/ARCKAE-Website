@@ -5,6 +5,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import { useAuth } from "../components/AuthContext";
+import { getApiUrl } from "../utils/api";
 import React from "react";
 
 export default function StaffLogin() {
@@ -21,7 +22,7 @@ export default function StaffLogin() {
     setError("");
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(getApiUrl("/api/auth/login"), {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
@@ -35,7 +36,7 @@ export default function StaffLogin() {
       if (response.ok) {
         const data = await response.json();
         const token = data.access_token;
-        const meRes = await fetch("/api/auth/me", {
+        const meRes = await fetch(getApiUrl("/api/auth/me"), {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (meRes.ok) {
