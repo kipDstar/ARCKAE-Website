@@ -14,9 +14,12 @@ services:
         fromDatabase:
           name: arckae-db
           property: connectionString
-      # Frontend URL for CORS - set to https://your-frontend-url when deploying
+      # Frontend URL for CORS - get from frontend service
       - key: CORS_ORIGINS
-        sync: false
+        fromService:
+          name: arckae-frontend
+          type: web
+          property: url
 
   # Frontend (nginx serving SPA, proxies /api to backend)
   - type: web
@@ -26,10 +29,7 @@ services:
     dockerfilePath: ./Dockerfile
     envVars:
       - key: BACKEND_URL
-        fromService:
-          name: arckae-backend
-          type: web
-          property: host
+        value: arckae-backend.onrender.com
 
 databases:
   - name: arckae-db
