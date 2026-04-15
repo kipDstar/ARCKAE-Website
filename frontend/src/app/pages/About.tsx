@@ -48,13 +48,13 @@ export default function About() {
               transition={{ duration: 0.6 }}
             >
               <h2 className="text-3xl md:text-4xl font-bold text-[#0B2C4D] mb-6">
-                Meet Zenah,
+                Meet Zena,
               </h2>
               <p className="text-lg text-gray-700 mb-4 leading-relaxed">
-                Founder and Director of ARCKAE Study Abroad Agency, Winnie is a passionate education consultant dedicated to helping Kenyan students achieve their dreams of studying abroad.
+                Founder and Director of ARCKAE Study Abroad Agency, Zena is a passionate education consultant dedicated to helping Kenyan students achieve their dreams of studying abroad.
               </p>
               <p className="text-lg text-gray-700 mb-4 leading-relaxed">
-                With extensive knowledge of the Australian education system and experience in student counseling, Zenah provides personalized guidance to ensure you find the right path to success.
+                With extensive knowledge of the Australian education system and experience in student counseling, Zena provides personalized guidance to ensure you find the right path to success.
               </p>
               <p className="text-lg text-gray-700 mb-6 leading-relaxed">
                 Her commitment to transparency, integrity, and student success has helped numerous students navigate the complex journey of studying abroad with confidence.

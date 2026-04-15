@@ -9,9 +9,10 @@ settings = get_settings()
 
 def _maybe_seed() -> None:
     import seed
-    db = SessionLocal()
+    from sqlalchemy.orm import Session
+    db: Session = SessionLocal()
     try:
-        has_service = db.query(Service).first() is not None
+        has_service = db.query(Service).first() is not None # pyright: ignore[reportUnknownMemberType]
         if not has_service:
             seed.main()
     finally:

@@ -156,7 +156,7 @@ export default function Location() {
                     </div>
                     <div className="text-center">
                       <h3 className="text-2xl font-bold mb-2">Winnie Jeptum Cheruiyot</h3>
-                      <p className="text-white/90 mb-4">Founder & Director</p>
+                      <p className="text-white/90 mb-4"> Director - Operations</p>
                       <p className="text-white/80 leading-relaxed">
                         With years of experience in education consulting, Winnie is dedicated to helping students achieve their dreams of studying abroad. Her personalized approach and deep knowledge of the Australian education system make her the perfect guide for your journey.
                       </p>
