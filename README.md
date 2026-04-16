@@ -1,13 +1,13 @@
-## ARCKAE Study Abroad Website
+## ARCKAE Website
 
-This repository contains the full‑stack implementation of the **ARCKAE Study Abroad Agency** website:
+This repository contains the full‑stack implementation of the **ARCKAE** website:
 
-- **Frontend**: React + TypeScript + Vite (in the `frontend` directory)
-- **Backend**: FastAPI + PostgreSQL + JWT auth (in the `backend` directory)
+- **Frontend**: React + TypeScript + Vite 
+- **Backend**: FastAPI + PostgreSQL + JWT auth 
 
 ---
 
-## Quick start (one-time setup)
+## Quick start 
 
 From the project root, run:
 
@@ -19,7 +19,7 @@ chmod +x scripts/setup.sh
 This script will (you may be asked for your sudo password):
 
 1. Start PostgreSQL if installed
-2. Set the `postgres` user password to `postgres` 
+2. Set the `postgres` user password to `******` 
 3. Create the `arckae` database
 5. Create a Python venv in `backend`, install dependencies, create tables, and seed data
 
