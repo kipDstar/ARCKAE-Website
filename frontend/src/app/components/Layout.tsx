@@ -4,6 +4,7 @@ import Footer from "./Footer";
 import WhatsAppButton from "./WhatsAppButton";
 import ScrollToTop from "./ScrollToTop";
 import ScrollToTopOnMount from "./ScrollToTopOnMount";
+import React from "react";
 
 export default function Layout() {
   return (

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Send, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { getApiUrl } from "../utils/api";
+import React from "react";
 
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +32,7 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await fetch(getApiUrl("/api/contact"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

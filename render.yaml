@@ -1,0 +1,35 @@
+# Render Blueprint: two Docker services from the same repo
+# Backend and frontend each use their own Dockerfile via rootDir + dockerfilePath.
+# Do not point Render at docker-compose.yml — it is for local dev only.
+
+services:
+  # Backend (FastAPI)
+  - type: web
+    runtime: docker
+    name: arckae-backend
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: arckae-db
+          property: connectionString
+      # Frontend URL for CORS - allow frontend to make direct API calls
+      - key: CORS_ORIGINS
+        fromService:
+          name: arckae-frontend
+          type: web
+          property: url
+
+  # Frontend (nginx serving SPA + static files)
+  # Direct API calls to backend use CORS
+  - type: web
+    runtime: docker
+    name: arckae-frontend
+    rootDir: frontend
+    dockerfilePath: ./Dockerfile
+
+databases:
+  - name: arckae-db
+    databaseName: arckae
+    plan: free

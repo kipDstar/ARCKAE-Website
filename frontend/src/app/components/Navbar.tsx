@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import React from "react";
@@ -9,6 +9,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,14 +27,14 @@ export default function Navbar() {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "About Us", path: "/about" },
-    { 
-      name: "Services", 
+    {
+      name: "Services",
       path: "/services",
       hasDropdown: true,
       subLinks: [
         { name: "Core Services", path: "/services" },
-        { name: "We Also Provide", path: "/we-also-provide" }
-      ]
+        { name: "We Also Provide", path: "/we-also-provide" },
+      ],
     },
     { name: "Study Options", path: "/study-options" },
     { name: "Destinations", path: "/destinations" },
@@ -67,6 +68,7 @@ export default function Navbar() {
                 {link.hasDropdown ? (
                   <>
                     <button
+                      onClick={() => navigate(link.path)}
                       className={`flex items-center space-x-1 transition-colors ${
                         location.pathname === link.path || location.pathname === "/we-also-provide"
                           ? "text-[#F47B20] font-semibold"

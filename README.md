@@ -1,15 +1,13 @@
-## ARCKAE Study Abroad Website
+## ARCKAE Website
 
-This repository contains the full‑stack implementation of the **ARCKAE Study Abroad Agency** website:
+This repository contains the full‑stack implementation of the **ARCKAE** website:
 
-- **Frontend**: React + TypeScript + Vite (in the `frontend` directory)
-- **Backend**: FastAPI + PostgreSQL + JWT auth (in the `backend` directory)
-
-The site targets students, parents, and young professionals seeking end‑to‑end study abroad support (IELTS training, career guidance, school applications, visa support, and post‑arrival services).
+- **Frontend**: React + TypeScript + Vite 
+- **Backend**: FastAPI + PostgreSQL + JWT auth 
 
 ---
 
-## Quick start (one-time setup)
+## Quick start 
 
 From the project root, run:
 
@@ -21,9 +19,8 @@ chmod +x scripts/setup.sh
 This script will (you may be asked for your sudo password):
 
 1. Start PostgreSQL if installed
-2. Set the `postgres` user password to `postgres` so the default `.env` works
+2. Set the `postgres` user password to `******` 
 3. Create the `arckae` database
-4. Copy `.env.example` to `.env` if you don’t have `.env` yet
 5. Create a Python venv in `backend`, install dependencies, create tables, and seed data
 
 Then start the app in **two terminals**:
@@ -32,6 +29,31 @@ Then start the app in **two terminals**:
 - **Terminal 2:** `cd frontend && npm install && npm run dev`
 
 Open **http://localhost:5173** in your browser.
+
+---
+
+## Deploying on Render
+
+This repo has **two** Dockerfiles (`backend/Dockerfile` and `frontend/Dockerfile`). Render only lets you set one “Dockerfile path” per service, so you use **two separate Web Services** (and optionally one Postgres) from the same repo.
+
+**Do not** set the Dockerfile path to `docker-compose.yml` — Render will try to parse it as a Dockerfile and fail.
+
+**Option A — Blueprint (recommended)**  
+Use the included `render.yaml` so both services and the DB are defined in one place:
+
+1. In the [Render Dashboard](https://dashboard.render.com), connect the repo and choose **Blueprint**.
+2. Point Render at the repo; it will detect `render.yaml` and create:
+   - **arckae-backend** (Docker, root dir `backend`)
+   - **arckae-frontend** (Docker, root dir `frontend`)
+   - **arckae-db** (Postgres)
+3. When prompted, set **CORS_ORIGINS** for the backend to your frontend URL (e.g. `https://arckae-frontend-xxxx.onrender.com`).
+4. After the first deploy, run the seed once via **Shell** on the backend service: `python seed.py`.
+
+**Option B — Manual**  
+Create two Web Services from the same repo:
+
+- **Backend:** Root Directory = `backend`, Dockerfile Path = `Dockerfile`. Add a Postgres (or external DB) and set `DATABASE_URL`.
+- **Frontend:** Root Directory = `frontend`, Dockerfile Path = `Dockerfile`. The frontend gets the backend URL via Render’s private networking (see `render.yaml`).
 
 ---
 
@@ -63,19 +85,16 @@ After setup, the seed creates one **admin** user. Staff must pass the **staff ga
 
 | Level      | How to get an account | After login |
 |-----------|------------------------|-------------|
-| **Admin** | Seeded: `admin@arckae.com` / `admin123`. Or create via `POST /api/auth/register` when no users exist (no token), or create more admins when logged in as admin. | Full dashboard: appointments, services, FAQs, users. |
+| **Admin** | Seeded: `******` / `******`. Or create via `POST /api/auth/register` when no users exist (no token), or create more admins when logged in as admin. | Full dashboard: appointments, services, FAQs, users. |
 | **Counsellor** | Admin creates via Dashboard → Users → Add User (role: Counsellor). | Dashboard: overview + appointments (only their assigned ones). |
 | **Visitor** | Admin creates via Dashboard → Users (role: Visitor). Or `POST /api/auth/register` with a valid admin token. | No dashboard access; used for non-staff accounts. |
 
 **Staff gate (before login):**
 
 1. Go to **/staff**.
-2. Enter a staff **email** (e.g. `admin@arckae.com`) and the **access key** from your `.env`: `STAFF_ACCESS_KEY`.  
-   Default in `.env.example` is `change_this_staff_key` — set this in `.env` and use the same value here.
+2. Enter a staff **email**  and the **access key** from your `.env`.  
 3. If the key matches and the email is an admin or counsellor, you are sent to **/login**.
-4. Log in with that user’s **email** and **password** (e.g. admin: `admin123`).
-
-**Summary:** Staff gate key = `STAFF_ACCESS_KEY` in `.env`. Admin login = `admin@arckae.com` / `admin123`. Change the admin password and `STAFF_ACCESS_KEY` in production.
+4. Log in with that user’s **email** and **password** 
 
 ---
 
@@ -96,27 +115,16 @@ After setup, the seed creates one **admin** user. Staff must pass the **staff ga
 ## Environment & Database Configuration
 
 The backend reads configuration from a `.env` file at the **project root**.
-An example file is provided as `.env.example`. **Never commit `.env`** — it contains secrets and is listed in `.gitignore`. If `.env` was ever pushed to the repo, rotate SMTP password, `JWT_SECRET_KEY`, and `STAFF_ACCESS_KEY` immediately.
 
 ### Default PostgreSQL URL
 
 By default, if you do not set `DATABASE_URL` explicitly, the backend uses:
 
 ```text
-postgresql+psycopg://postgres:postgres@localhost:5432/arckae
+postgresql+psycopg://postgres:postgres@localhost:****/****
 ```
 
-This corresponds to:
-
-- **User**: `postgres`
-- **Password**: `postgres`
-- **Host**: `localhost`
-- **Port**: `5432`
-- **Database**: `arckae`
-
-You can keep this default for local development or change it to match your own PostgreSQL setup.
-
-### When to create the database (order of steps)
+### When to create the database 
 
 **Create the database before starting the backend.** The backend connects to PostgreSQL as soon as it starts; if the `arckae` database doesn’t exist yet, the app will fail to start.
 
@@ -141,49 +149,19 @@ Or, inside `psql`:
 CREATE DATABASE arckae;
 ```
 
-### Setting up the `.env` file
-
-1. Copy the example:
-
-   ```bash
-   cp .env.example .env
-   ```
-
-2. Adjust values as needed:
-
-   - `DATABASE_URL` – PostgreSQL connection string (see default above)
-   - `JWT_SECRET_KEY` – long random secret for JWT signing
-   - `CORS_ORIGINS` – comma‑separated list of frontend URLs (e.g. `http://localhost:5173`)
-   - `SMTP_*` – optional SMTP values for email notifications from the contact/appointment form
-
-If SMTP settings are not configured, the backend will simply skip sending emails (no crash).
-
-**Where is `.env`?** Copy it at the **project root** (where you see `frontend`, `backend`, `README.md`):
-
-```bash
-# From project root
-cp .env.example .env
-```
-
-The backend loads this file whether you run uvicorn or the seed script from the `backend` folder.
-
 ### What does "Active: active (exited)" mean for PostgreSQL?
 
 When you run `sudo service postgresql status`, you may see **Active: active (exited)**. That's normal: the main `postgresql` service starts the real database process and then exits. The database is still running. To double-check, run: `pg_isready -h localhost` (should print "accepting connections").
 
 ### If you get “password authentication failed for user postgres”
 
-The default `DATABASE_URL` uses password `postgres`. If PostgreSQL rejects it, set that password:
+The default `DATABASE_URL` uses a password . If PostgreSQL rejects it, set that password:
 
 ```bash
-sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '******';"
 ```
 
 Or use a different password and put it in `.env`:
-
-```text
-DATABASE_URL=postgresql+psycopg://postgres:YOUR_PASSWORD@localhost:5432/arckae
-```
 
 ---
 
@@ -233,13 +211,13 @@ Open a **new** terminal. Run these **one at a time**:
 | 2 | `npm install` | Install frontend dependencies |
 | 3 | `npm run dev` | Start the website dev server |
 
-When you see something like `Local: http://localhost:5173/`, open that URL in your browser. The site will talk to the backend on port 8000 automatically.
+When you see something like `Local: http://localhost:****/`, open that URL in your browser. The site will talk to the backend on port 8000 automatically.
 
 ---
 
 ### Optional: database and first-time setup
 
-- **PostgreSQL:** The backend expects a database. If you don’t have one yet, create it (e.g. `createdb arckae` if you have PostgreSQL), and set `DATABASE_URL` in a `.env` file in the project root (copy from `.env.example`).
+- **PostgreSQL:** The backend expects a database. If you don’t have one yet, create it (e.g. `createdb arckae` if you have PostgreSQL), and set `DATABASE_URL` in a `.env` file in the project root 
 - **Seed data:** From the project root, run `cd backend && source .venv/bin/activate && python3 seed.py` to load sample services, FAQs, and an admin user.
 
 ---

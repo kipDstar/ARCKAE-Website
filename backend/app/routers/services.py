@@ -10,7 +10,7 @@ from ..models import Service
 from ..schemas import ServiceCreate, ServiceRead, ServiceUpdate
 
 
-router = APIRouter(prefix="/api/services", tags=["services"])
+router = APIRouter(tags=["services"])
 
 
 @router.get("", response_model=List[ServiceRead])

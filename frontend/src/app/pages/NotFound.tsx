@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { motion } from "motion/react";
 import { Home, ArrowLeft } from "lucide-react";
+import React from "react";
 
 export default function NotFound() {
   return (

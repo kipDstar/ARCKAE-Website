@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "motion/react";
+import { getApiUrl } from "../utils/api";
 import {
   GraduationCap,
   BookOpen,
@@ -11,6 +12,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import { Link } from "react-router";
+import React from "react";
 
 interface Service {
   id: string;
@@ -113,7 +115,7 @@ export default function Services() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/services")
+    fetch(getApiUrl("/api/services"))
       .then((res) => res.json())
       .then((data) => {
         setServices(data);

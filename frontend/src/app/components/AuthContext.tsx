@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { getApiUrl } from "../utils/api";
+import React from "react";
 
 interface User {
   id: string;
@@ -26,8 +28,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
-      // Verify token and get user
-      fetch("/api/auth/me", {
+      // Verify token and get user against the same origin (/api is proxied in dev/prod)
+      fetch(getApiUrl("/api/auth/me"), {
         headers: {
           Authorization: `Bearer ${storedToken}`,
         },

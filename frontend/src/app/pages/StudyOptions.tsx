@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Badge } from "../components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
 import ScrollToTopOnMount from "../components/ScrollToTopOnMount";
+import React from "react";
 
 // Mock data representing scraped university information
 const universities = [
@@ -661,16 +662,18 @@ export default function StudyOptions() {
                             ))}
                           </SelectContent>
                         </Select>
-                        <Select value={selectedState} onValueChange={setSelectedState} className="mt-2">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select state" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {states.map(state => (
-                              <SelectItem key={state} value={state}>{state}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <div className="mt-2">
+                          <Select value={selectedState} onValueChange={setSelectedState}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select state" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {states.map(state => (
+                                <SelectItem key={state} value={state}>{state}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
 
                       {/* Course Level */}
