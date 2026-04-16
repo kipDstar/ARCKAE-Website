@@ -21,9 +21,8 @@ chmod +x scripts/setup.sh
 This script will (you may be asked for your sudo password):
 
 1. Start PostgreSQL if installed
-2. Set the `postgres` user password to `postgres` so the default `.env` works
+2. Set the `postgres` user password to `postgres` 
 3. Create the `arckae` database
-4. Copy `.env.example` to `.env` if you don’t have `.env` yet
 5. Create a Python venv in `backend`, install dependencies, create tables, and seed data
 
 Then start the app in **two terminals**:
