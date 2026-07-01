@@ -31,7 +31,7 @@ export default function Location() {
           className="w-full h-96 md:h-[500px] relative"
         >
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.756!2d35.508!3d0.531!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMC41MzHCsDAwLjMwOCcwJzAwLjAiTiAzNcKwMzAnMjguOCJF!5e0!3m2!1sen!2ske!4v1690000000000!5m2!1sen!2ske"
+            src="https://www.google.com/maps/embed?pb=!1m13!1m8!1m3!1d226.0370115644132!2d35.509667855756526!3d0.6705132145264816!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMMKwNDAnMTQuNCJOIDM1wrAzMCczNS44IkU!5e1!3m2!1sen!2ske!4v1782918245789!5m2!1sen!2ske"
             width="100%"
             height="100%"
             style={{ border: 0 }}
