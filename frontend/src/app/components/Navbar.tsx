@@ -36,8 +36,6 @@ export default function Navbar() {
         { name: "We Also Provide", path: "/we-also-provide" },
       ],
     },
-    { name: "Study Options", path: "/study-options" },
-    { name: "Destinations", path: "/destinations" },
     { name: "FAQ", path: "/faq" },
     { name: "Location", path: "/location" },
     { name: "Contact", path: "/contact" },

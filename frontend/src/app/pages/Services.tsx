@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "motion/react";
-import { getApiUrl } from "../utils/api";
 import {
   GraduationCap,
   BookOpen,
@@ -13,15 +12,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 import React from "react";
-
-interface Service {
-  id: string;
-  name: string;
-  category: string;
-  icon_url: string | null;
-  short_description: string;
-  long_description: string;
-}
+import { STATIC_SERVICES, type ServiceItem } from "../data/staticContent";
 
 const iconMap: Record<string, LucideIcon> = {
   "support.svg": GraduationCap,
@@ -50,7 +41,7 @@ function ServiceCard({
   service,
   index,
 }: {
-  service: Service;
+  service: ServiceItem;
   index: number;
 }) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -111,30 +102,7 @@ function ServiceCard({
 }
 
 export default function Services() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(getApiUrl("/api/services"))
-      .then((res) => res.json())
-      .then((data) => {
-        setServices(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="pt-24 pb-20">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center">Loading services...</div>
-        </div>
-      </div>
-    );
-  }
+  const services = STATIC_SERVICES;
 
   return (
     <div className="pt-24 pb-20">

@@ -58,16 +58,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/study-options" className="text-sm hover:text-[#F47B20] transition-colors">
-                  Study Options
-                </Link>
-              </li>
-              <li>
-                <Link to="/destinations" className="text-sm hover:text-[#F47B20] transition-colors">
-                  Destinations
-                </Link>
-              </li>
-              <li>
                 <Link to="/faq" className="text-sm hover:text-[#F47B20] transition-colors">
                   FAQ
                 </Link>
@@ -85,17 +75,15 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3 - Destinations */}
+          {/* Column 3 - Study Paths */}
           <div>
-            <h3 className="text-xl font-bold mb-6 text-[#F47B20]">Destinations</h3>
+            <h3 className="text-xl font-bold mb-6 text-[#F47B20]">Study Paths</h3>
             <ul className="space-y-3">
-              <li>
-                <Link to="/destinations" className="text-sm hover:text-[#F47B20] transition-colors flex items-center">
-                  <span className="mr-2">🇦🇺</span> Australia
-                </Link>
+              <li className="text-sm flex items-center">
+                <span className="mr-2">🇦🇺</span> Australia
               </li>
               <li className="text-sm text-gray-400">
-                More destinations coming soon...
+                More study pathways coming soon...
               </li>
             </ul>
           </div>

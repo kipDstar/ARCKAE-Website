@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { motion } from "motion/react";
-import { getApiUrl } from "../utils/api";
 import {
   Accordion,
   AccordionContent,
@@ -17,13 +16,7 @@ import {
 } from "lucide-react";
 import ScrollToTopOnMount from "../components/ScrollToTopOnMount";
 import React from "react";
-
-interface FAQItem {
-  id: string;
-  question: string;
-  answer: string;
-  category: string;
-}
+import { STATIC_FAQS, type FAQItem } from "../data/staticContent";
 
 const categoryIcons: Record<string, LucideIcon> = {
   "Getting Started": HelpCircle,
@@ -34,20 +27,7 @@ const categoryIcons: Record<string, LucideIcon> = {
 };
 
 export default function FAQ() {
-  const [faqs, setFaqs] = useState<FAQItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(getApiUrl("/api/faqs"))
-      .then((res) => res.json())
-      .then((data) => {
-        setFaqs(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  }, []);
+  const faqs = STATIC_FAQS;
 
   const faqCategories = useMemo(() => {
     const byCategory = new Map<string, FAQItem[]>();
@@ -62,16 +42,6 @@ export default function FAQ() {
       questions: questions.map((q) => ({ question: q.question, answer: q.answer })),
     }));
   }, [faqs]);
-
-  if (loading) {
-    return (
-      <div className="pt-24 pb-20">
-        <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center">Loading FAQs...</div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>

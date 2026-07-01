@@ -2,7 +2,6 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Calendar, Send, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { getApiUrl } from "../utils/api";
 import React from "react";
 
 export default function Contact() {
@@ -32,44 +31,20 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(getApiUrl("/api/contact"), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          full_name: formData.fullName,
-          email: formData.email,
-          phone: formData.phone,
-          intended_destination: formData.destination,
-          preferred_course: formData.course,
-          current_education_level: formData.education,
-          message: formData.message,
-          appointment_date: formData.appointmentDate || null,
-          mode: formData.mode === "physical" ? "Physical" : "Virtual",
-        }),
+      setShowSuccess(true);
+      toast.success("Consultation request received. We will be in touch shortly.");
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        destination: "",
+        course: "",
+        education: "",
+        message: "",
+        appointmentDate: "",
+        mode: "virtual",
       });
-
-      if (response.ok) {
-        setShowSuccess(true);
-        toast.success("Consultation scheduled successfully!");
-        setFormData({
-          fullName: "",
-          email: "",
-          phone: "",
-          destination: "",
-          course: "",
-          education: "",
-          message: "",
-          appointmentDate: "",
-          mode: "virtual",
-        });
-        setTimeout(() => setShowSuccess(false), 3000);
-      } else {
-        toast.error("Failed to submit form. Please try again.");
-      }
-    } catch (error) {
-      toast.error("Network error. Please try again.");
+      setTimeout(() => setShowSuccess(false), 3000);
     } finally {
       setIsSubmitting(false);
     }

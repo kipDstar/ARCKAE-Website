@@ -1,263 +1,104 @@
-## ARCKAE Website
+# ARCKAE Website
 
-This repository contains the full‑stack implementation of the **ARCKAE** website:
+ARCKAE is a modern, static marketing website for an education consultancy. The current version is designed to run entirely as a front-end site, with no backend or database required for deployment.
 
-- **Frontend**: React + TypeScript + Vite 
-- **Backend**: FastAPI + PostgreSQL + JWT auth 
+## What this project includes
 
----
+- React + TypeScript + Vite front end
+- Static content for the main pages and FAQ section
+- No server-side processes, API dependencies, or database requirements
+- Responsive design that preserves the existing UI flow and structure
 
-## Quick start 
+## Local development
 
 From the project root, run:
 
 ```bash
-chmod +x scripts/setup.sh
-./scripts/setup.sh
+cd frontend
+npm install
+npm run dev
 ```
 
-This script will (you may be asked for your sudo password):
+Then open http://localhost:5173 in your browser.
 
-1. Start PostgreSQL if installed
-2. Set the `postgres` user password to `******` 
-3. Create the `arckae` database
-5. Create a Python venv in `backend`, install dependencies, create tables, and seed data
+## Production build
 
-Then start the app in **two terminals**:
-
-- **Terminal 1:** `cd backend && source .venv/bin/activate && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
-- **Terminal 2:** `cd frontend && npm install && npm run dev`
-
-Open **http://localhost:5173** in your browser.
-
----
-
-## Deploying on Render
-
-This repo has **two** Dockerfiles (`backend/Dockerfile` and `frontend/Dockerfile`). Render only lets you set one “Dockerfile path” per service, so you use **two separate Web Services** (and optionally one Postgres) from the same repo.
-
-**Do not** set the Dockerfile path to `docker-compose.yml` — Render will try to parse it as a Dockerfile and fail.
-
-**Option A — Blueprint (recommended)**  
-Use the included `render.yaml` so both services and the DB are defined in one place:
-
-1. In the [Render Dashboard](https://dashboard.render.com), connect the repo and choose **Blueprint**.
-2. Point Render at the repo; it will detect `render.yaml` and create:
-   - **arckae-backend** (Docker, root dir `backend`)
-   - **arckae-frontend** (Docker, root dir `frontend`)
-   - **arckae-db** (Postgres)
-3. When prompted, set **CORS_ORIGINS** for the backend to your frontend URL (e.g. `https://arckae-frontend-xxxx.onrender.com`).
-4. After the first deploy, run the seed once via **Shell** on the backend service: `python seed.py`.
-
-**Option B — Manual**  
-Create two Web Services from the same repo:
-
-- **Backend:** Root Directory = `backend`, Dockerfile Path = `Dockerfile`. Add a Postgres (or external DB) and set `DATABASE_URL`.
-- **Frontend:** Root Directory = `frontend`, Dockerfile Path = `Dockerfile`. The frontend gets the backend URL via Render’s private networking (see `render.yaml`).
-
----
-
-## Docker (full stack)
-
-From the project root, with a `.env` file in place (copy from `.env.example` if needed):
+To generate the static files for deployment:
 
 ```bash
-docker compose up --build
+cd frontend
+npm run build
 ```
 
-- **Frontend:** http://localhost (port 80) — nginx serves the app and proxies `/api` to the backend.
-- **Backend:** http://localhost:8000 (direct).
-- **PostgreSQL** runs in a container; data is stored in a Docker volume.
+The build output will be written to the dist folder.
 
-**First-time seed (admin user, services, FAQs):** after the stack is up, run once:
+## Deploying on Render as a static site
+
+This repository is now set up for deployment as a Render Static Site.
+
+### Option 1: Deploy with the included Render blueprint
+
+1. In the Render dashboard, create a new project and connect this repository.
+2. Render will detect the included render.yaml configuration.
+3. It will create a static site using the frontend folder.
+4. The build command is:
 
 ```bash
-docker compose exec backend python seed.py
+npm install && npm run build
 ```
 
-Then use staff gate and login as in **Staff access** below (e.g. `admin@arckae.com` / `admin123`).
-
----
-
-## Staff access (all 3 account levels)
-
-After setup, the seed creates one **admin** user. Staff must pass the **staff gate** before the login page.
-
-| Level      | How to get an account | After login |
-|-----------|------------------------|-------------|
-| **Admin** | Seeded: `******` / `******`. Or create via `POST /api/auth/register` when no users exist (no token), or create more admins when logged in as admin. | Full dashboard: appointments, services, FAQs, users. |
-| **Counsellor** | Admin creates via Dashboard → Users → Add User (role: Counsellor). | Dashboard: overview + appointments (only their assigned ones). |
-| **Visitor** | Admin creates via Dashboard → Users (role: Visitor). Or `POST /api/auth/register` with a valid admin token. | No dashboard access; used for non-staff accounts. |
-
-**Staff gate (before login):**
-
-1. Go to **/staff**.
-2. Enter a staff **email**  and the **access key** from your `.env`.  
-3. If the key matches and the email is an admin or counsellor, you are sent to **/login**.
-4. Log in with that user’s **email** and **password** 
-
----
-
-## Tech Stack
-
-- **Frontend**
-  - React + TypeScript (Vite)
-  - TailwindCSS (utility‑first styling)
-  - React Router for navigation
-- **Backend**
-  - FastAPI (Python)
-  - PostgreSQL with SQLAlchemy ORM
-  - JWT‑based authentication and role‑based access (Admin, Counsellor, Visitor)
-  - Email notifications via SMTP (optional)
-
----
-
-## Environment & Database Configuration
-
-The backend reads configuration from a `.env` file at the **project root**.
-
-### Default PostgreSQL URL
-
-By default, if you do not set `DATABASE_URL` explicitly, the backend uses:
-
-```text
-postgresql+psycopg://postgres:postgres@localhost:****/****
-```
-
-### When to create the database 
-
-**Create the database before starting the backend.** The backend connects to PostgreSQL as soon as it starts; if the `arckae` database doesn’t exist yet, the app will fail to start.
-
-**Order:**
-
-1. Install and start PostgreSQL (if not already running).
-2. Create the database (see below).
-3. Optionally copy `.env.example` to `.env` and set `DATABASE_URL` if you use different credentials.
-4. Start the backend (`uvicorn app.main:app ...`). On first run it will create the tables inside `arckae`.
-
-### Creating the database locally
-
-On a machine with PostgreSQL installed, run **before** starting the backend:
+5. The publish directory is:
 
 ```bash
-createdb arckae
+dist
 ```
 
-Or, inside `psql`:
+### Option 2: Deploy manually
 
-```sql
-CREATE DATABASE arckae;
-```
-
-### What does "Active: active (exited)" mean for PostgreSQL?
-
-When you run `sudo service postgresql status`, you may see **Active: active (exited)**. That's normal: the main `postgresql` service starts the real database process and then exits. The database is still running. To double-check, run: `pg_isready -h localhost` (should print "accepting connections").
-
-### If you get “password authentication failed for user postgres”
-
-The default `DATABASE_URL` uses a password . If PostgreSQL rejects it, set that password:
+1. Create a new Static Site in Render.
+2. Set the root directory to frontend.
+3. Use the build command:
 
 ```bash
-sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD '******';"
+npm install && npm run build
 ```
 
-Or use a different password and put it in `.env`:
+4. Set the publish directory to dist.
+5. Leave the site as a static deployment; no backend service is required.
 
----
+### SPA routing support
 
-## How to run the app (simple steps)
+The render.yaml file includes a rewrite rule so routes such as /services, /faq, and /contact work correctly when refreshed directly in the browser.
 
-You need **two terminals**: one for the backend, one for the frontend.
+## Pointing your custom domain to Render
 
-**Quick copy-paste (after you have PostgreSQL and a `.env` file):**
+Once the static site is deployed:
 
-- **Terminal 1 (backend):**  
-  `cd backend && python3 -m venv .venv && source .venv/bin/activate && python3 -m pip install -r requirements.txt && uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
-- **Terminal 2 (frontend):**  
-  `cd frontend && npm install && npm run dev`
+1. Open the Render dashboard for the site.
+2. Go to Custom Domains.
+3. Click Add Custom Domain.
+4. Enter your domain, such as www.yourdomain.com or yourdomain.com.
+5. Render will provide the DNS values to add at your domain registrar.
 
-Then open **http://localhost:5173** in your browser.  
-*(If you get “pip not found”, use `python3 -m pip` instead of `pip` in the step-by-step section below.)*
+### DNS guidance
 
----
+- For a subdomain such as www, add a CNAME record pointing to the Render target shown in the dashboard.
+- For the root/apex domain such as example.com, use the ALIAS/ANAME or A record values Render provides.
+- After DNS propagation, your site will be available at the custom domain.
 
-### Terminal 1 — Backend (API server)
+## Notes on the current static setup
 
-Run these commands **one at a time** in order:
+- The public website content is now fully static and does not depend on a backend service.
+- The contact form shows a success confirmation locally and does not require a server endpoint to function in the current version.
+- Staff login, dashboard, and database-backed features are not part of the static deployment model.
 
-| Step | Command | What it does |
-|------|---------|--------------|
-| 1 | `cd backend` | Go into the backend folder |
-| 2 | `python3 -m venv .venv` | Create a virtual environment (installs Python packages here only) |
-| 3 | `source .venv/bin/activate` | Turn on the virtual environment (your prompt may show `(.venv)`) |
-| 4 | `python3 -m pip install -r requirements.txt` | Install backend dependencies (FastAPI, database, etc.) |
-| 5 | `uvicorn app.main:app --reload --host 0.0.0.0 --port 8000` | Start the API server |
+## Project structure
 
-When you see something like `Uvicorn running on http://0.0.0.0:8000`, the backend is running. Leave this terminal open.
+- frontend/src/app/pages — route-based page components
+- frontend/src/app/components — shared layout and navigation components
+- frontend/src/app/data/staticContent.ts — local static content used by the site
+- render.yaml — Render deployment configuration for a static site
 
-**If step 4 says "pip not found":** you can install pip with `sudo apt install python3-pip`, or just use `python3 -m pip install -r requirements.txt` (step 4 already uses this).
-
-**If `uvicorn` says "not found":** make sure you ran step 3 (activate the venv), then run step 4 again. Uvicorn is installed by step 4.
-
----
-
-### Terminal 2 — Frontend (website)
-
-Open a **new** terminal. Run these **one at a time**:
-
-| Step | Command | What it does |
-|------|---------|--------------|
-| 1 | `cd frontend` | Go into the frontend folder |
-| 2 | `npm install` | Install frontend dependencies |
-| 3 | `npm run dev` | Start the website dev server |
-
-When you see something like `Local: http://localhost:****/`, open that URL in your browser. The site will talk to the backend on port 8000 automatically.
-
----
-
-### Optional: database and first-time setup
-
-- **PostgreSQL:** The backend expects a database. If you don’t have one yet, create it (e.g. `createdb arckae` if you have PostgreSQL), and set `DATABASE_URL` in a `.env` file in the project root 
-- **Seed data:** From the project root, run `cd backend && source .venv/bin/activate && python3 seed.py` to load sample services, FAQs, and an admin user.
-
----
-
-## Backend API (reference)
-
-The API will be available at `http://localhost:8000`.
-
-Key routes:
-
-- `GET /api/health` – health check
-- `POST /api/auth/login` – staff login (Admin/Counsellor)
-- `POST /api/auth/register` – create users (first user or admin‑only afterward)
-- `GET /api/services` – public list of main and auxiliary services
-- `GET /api/faqs` – public FAQ listing
-- `POST /api/contact` – public contact / appointment submission
-- `GET /api/appointments` – appointments list (Admin/Counsellor)
-- `PUT /api/appointments/{id}` – update appointment status, counsellor, date, and mode
-
----
-
-*(Frontend run steps are in the "How to run the app" section above — use the `frontend` folder and `npm run dev`.)*
-
----
-
-## Next Steps (High Level)
-
-- Build out all ARCKAE‑specific pages (Landing, About, Services, Destinations, Location with Google Maps link, Contact/Booking, FAQ).
-- Implement a staff‑only entry flow (secret key / email check) that leads to the Admin/Counsellor login.
-- Create an in‑browser admin panel for managing Services, FAQs, Users, and Appointments via the FastAPI API.
-
-# ARCKAE-Website
-Client: ARCKAE EDUCATION AGENCY LTD
-
-Docker setup
-
-File	Purpose
-backend/Dockerfile	Python 3.12-slim image; installs deps and runs uvicorn on port 8000.
-backend/.dockerignore	Excludes .venv, __pycache__, .env, etc.
-frontend/Dockerfile	Multi-stage: Node 20 build → npm run build; then nginx:alpine serves dist/ and proxies /api to the backend.
 frontend/nginx.conf	SPA fallback + location /api/ → http://backend:8000/api/.
 frontend/.dockerignore	Excludes node_modules, dist, .env.
 docker-compose.yml	Defines postgres, backend, frontend; uses host .env via env_file and overrides DATABASE_URL and CORS_ORIGINS for the backend.
